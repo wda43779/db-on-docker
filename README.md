@@ -15,5 +15,6 @@ make sh-postgres
 \l --列出数据库
 \c <name> --连接数据库
 \dt --列出数据库中的表
+\d+ <table> -- 查看表的列
 \q --退出
 ```
