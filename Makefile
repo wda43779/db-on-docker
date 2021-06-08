@@ -17,6 +17,8 @@ mongo:
 	docker run -d --name mongo_dev -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=password -p 27017:27017 --restart always mongo
 	echo "mongodb://root:password@127.0.0.1:27017"
 
+mongo-shell:
+	docker exec -it mongo_dev mongo
 redis:
 	docker run -d --name redis_dev -p 6379:6379 --restart always redis
 	echo "redis://127.0.0.1:6379"
