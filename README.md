@@ -1,4 +1,6 @@
-# Postgre 数据库
+# 在 Docker 中运行开发数据库
+
+## Postgre 数据库
 
 启动
 ```
@@ -7,7 +9,7 @@ make postgres
 
 连接 shell
 ```
-make sh-postgres
+make psql
 ```
 
 管理
