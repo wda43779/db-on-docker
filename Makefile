@@ -13,9 +13,20 @@ postgres:
 psql:
 	docker exec -it postgres_dev psql -Upostgres
 
+
 mongo:
-	docker run -d --name mongo_dev -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=password -p 27017:27017 --restart always mongo
-	echo "mongodb://root:password@127.0.0.1:27017"
+	docker run -d --name mongo_dev --network host -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=password -v mongo_dev_volume:/data/db --restart always mongo
+	docker run -d --name mongo_express_dev --network host -e ME_CONFIG_MONGODB_SERVER=localhost -e ME_CONFIG_MONGODB_ADMINUSERNAME=root -e ME_CONFIG_MONGODB_ADMINPASSWORD=password --restart always mongo-express
+	echo "mongodb://root:password@localhost:27017/logger?authSource=admin"
+	echo "mongo-express at http://localhost:8081/"
+
+mongo-network:
+	docker network create -d bridge mongo-network
+	docker run -d --name mongo_dev --network mongo-network -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=password -v mongo_dev_volume:/data/db -p 27017:27017 --restart always mongo
+	docker run -d --name mongo_express_dev --network mongo-network -e ME_CONFIG_MONGODB_SERVER=mongo_dev -e ME_CONFIG_MONGODB_ADMINUSERNAME=root -e ME_CONFIG_MONGODB_ADMINPASSWORD=password -p 8081:8081 --restart always mongo-express
+	echo "mongodb://root:password@localhost:27017/logger?authSource=admin"
+	echo "mongo-express at http://localhost:8081/"
+
 mongosh:
 	docker exec -it mongo_dev mongosh -u root -p password
 
